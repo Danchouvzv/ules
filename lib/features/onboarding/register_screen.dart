@@ -48,23 +48,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const _SecurePill(),
                       ],
                     ),
-                    const SizedBox(height: 34),
-                    Text(
-                      'Войдите в Ules',
-                      style: Theme.of(context)
-                          .textTheme
-                          .displaySmall
-                          ?.copyWith(fontWeight: FontWeight.w900, height: 1),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Один номер, одно eSIM-место, Kaspi hold и паспорт группы с прозрачной экономикой сделки.',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                            height: 1.35,
-                            fontWeight: FontWeight.w600,
+                    const SizedBox(height: 26),
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: UlesColors.slate,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [
+                          BoxShadow(
+                            color: UlesColors.slate.withOpacity(.18),
+                            blurRadius: 28,
+                            offset: const Offset(0, 16),
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Войдите в Ules',
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall
+                                ?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900,
+                                    height: 1),
                           ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Один номер, одно eSIM-место, Kaspi hold и паспорт группы с прозрачной экономикой сделки.',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: Colors.white.withOpacity(.72),
+                                  height: 1.35,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 28),
                     Container(
@@ -111,7 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               prefixIconConstraints:
                                   const BoxConstraints(minWidth: 48),
                               filled: true,
-                              fillColor: const Color(0xFFF8FAFC),
+                              fillColor: UlesColors.canvas,
                               hintStyle: TextStyle(
                                   color: UlesColors.muted.withOpacity(.72),
                                   fontWeight: FontWeight.w700),
@@ -232,7 +256,7 @@ class _KaspiToggle extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
+        color: UlesColors.canvas,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: UlesColors.hairline),
       ),

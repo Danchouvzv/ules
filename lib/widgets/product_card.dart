@@ -28,14 +28,23 @@ class ProductCard extends ConsumerWidget {
     final savingPercent =
         ((1 - groupPrice / product.retailPrice) * 100).round();
     return InkWell(
-      borderRadius: BorderRadius.circular(26),
+      borderRadius: BorderRadius.circular(22),
       onTap: () => context.go('/product/${product.id}'),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16),
-        child: Glass(
-          radius: 26,
-          padding: EdgeInsets.zero,
-          opacity: 1,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: UlesColors.hairline),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(.055),
+                blurRadius: 24,
+                offset: const Offset(0, 12),
+              ),
+            ],
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,9 +54,9 @@ class ProductCard extends ConsumerWidget {
                     tag: 'product-${product.id}',
                     child: ClipRRect(
                       borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(26)),
+                          const BorderRadius.vertical(top: Radius.circular(22)),
                       child: AspectRatio(
-                        aspectRatio: 1.42,
+                        aspectRatio: 1.5,
                         child: Image.network(
                           product.imageUrl,
                           fit: BoxFit.cover,
@@ -109,7 +118,7 @@ class ProductCard extends ConsumerWidget {
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
-                          .titleLarge
+                          .titleMedium
                           ?.copyWith(fontWeight: FontWeight.w900, height: 1.05),
                     ),
                     const SizedBox(height: 10),
@@ -164,7 +173,7 @@ class ProductCard extends ConsumerWidget {
             ],
           ),
         ),
-      ).animate().fadeIn(duration: 450.ms).slideY(begin: .06, duration: 450.ms),
+      ).animate().fadeIn(duration: 300.ms).slideY(begin: .03, duration: 300.ms),
     );
   }
 }
@@ -177,7 +186,7 @@ class _FavoriteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white.withOpacity(.92),
+      color: Colors.white,
       shape: const CircleBorder(),
       child: InkWell(
         customBorder: const CircleBorder(),
@@ -206,7 +215,7 @@ class _Badge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
-          color: Colors.white.withOpacity(.92),
+          color: Colors.white,
           border: Border.all(color: UlesColors.hairline),
           borderRadius: BorderRadius.circular(999)),
       child: Text(text,
@@ -227,14 +236,12 @@ class _SavingBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
-          color: Colors.white.withOpacity(.92),
-          border: Border.all(color: UlesColors.hairline),
+          color: UlesColors.ink,
+          border: Border.all(color: UlesColors.ink),
           borderRadius: BorderRadius.circular(999)),
       child: Text(text,
           style: const TextStyle(
-              color: UlesColors.ink,
-              fontWeight: FontWeight.w900,
-              fontSize: 12)),
+              color: Colors.white, fontWeight: FontWeight.w900, fontSize: 12)),
     );
   }
 }

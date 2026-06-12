@@ -32,7 +32,7 @@ class FeedScreen extends ConsumerWidget {
       body: IosPageBackground(
         child: SafeArea(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 104),
+            padding: const EdgeInsets.fromLTRB(18, 12, 18, 104),
             children: [
               _HomeHeader(
                 title: l.t('feedTitle'),
@@ -44,7 +44,7 @@ class FeedScreen extends ConsumerWidget {
                         settings.locale.languageCode == 'ru' ? 'kk' : 'ru')),
                 onProfileTap: () => context.go('/profile'),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               _SearchSurface(
                 query: session.searchQuery,
                 onChanged: ref.read(sessionProvider.notifier).setSearchQuery,
@@ -60,7 +60,7 @@ class FeedScreen extends ConsumerWidget {
                   }
                 },
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               _InsightsRow(
                 closedGroups: orders.length + 124,
                 savedAmount: saved + 8400000,
@@ -71,7 +71,7 @@ class FeedScreen extends ConsumerWidget {
                         2)
                     .length,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               const _ExplainableFeedCard(),
               const SizedBox(height: 14),
               SizedBox(
@@ -132,60 +132,109 @@ class _HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      padding: const EdgeInsets.fromLTRB(18, 18, 14, 18),
+      decoration: BoxDecoration(
+        color: UlesColors.slate,
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: [
+          BoxShadow(
+            color: UlesColors.slate.withOpacity(.18),
+            blurRadius: 28,
+            offset: const Offset(0, 16),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(subtitle,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: Colors.white.withOpacity(.68),
+                        fontWeight: FontWeight.w800)),
+                const SizedBox(height: 8),
+                Text(title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                        height: 1.02)),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Icon(PhosphorIcons.lockKey(),
+                        color: UlesColors.green, size: 16),
+                    const SizedBox(width: 6),
+                    Text('Kaspi hold · eSIM verified',
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium
+                            ?.copyWith(
+                                color: Colors.white.withOpacity(.76),
+                                fontWeight: FontWeight.w800)),
+                  ],
+                )
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Column(
             children: [
-              Text(subtitle,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: UlesColors.muted, fontWeight: FontWeight.w800)),
-              const SizedBox(height: 6),
-              Text(title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(fontWeight: FontWeight.w900, height: 1.02)),
+              _RoundAction(
+                  label: language, onTap: onLanguageTap, inverted: true),
+              const SizedBox(height: 8),
+              _RoundAction(
+                  icon: PhosphorIcons.userCircle(),
+                  onTap: onProfileTap,
+                  inverted: true),
             ],
           ),
-        ),
-        const SizedBox(width: 12),
-        _RoundAction(label: language, onTap: onLanguageTap),
-        const SizedBox(width: 8),
-        _RoundAction(icon: PhosphorIcons.userCircle(), onTap: onProfileTap),
-      ],
+        ],
+      ),
     );
   }
 }
 
 class _RoundAction extends StatelessWidget {
-  const _RoundAction({this.icon, this.label, required this.onTap});
+  const _RoundAction(
+      {this.icon, this.label, required this.onTap, this.inverted = false});
 
   final IconData? icon;
   final String? label;
   final VoidCallback onTap;
+  final bool inverted;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       customBorder: const CircleBorder(),
       onTap: onTap,
-      child: Glass(
-        radius: 999,
+      child: Container(
         padding: const EdgeInsets.all(12),
-        opacity: 1,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: inverted ? Colors.white.withOpacity(.1) : Colors.white,
+          border: Border.all(
+              color: inverted
+                  ? Colors.white.withOpacity(.16)
+                  : UlesColors.hairline),
+        ),
         child: SizedBox(
           width: 24,
           height: 24,
           child: Center(
             child: icon == null
                 ? Text(label!,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w900, fontSize: 12))
-                : Icon(icon, size: 22, color: UlesColors.ink),
+                    style: TextStyle(
+                        color: inverted ? Colors.white : UlesColors.ink,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 12))
+                : Icon(icon,
+                    size: 22, color: inverted ? Colors.white : UlesColors.ink),
           ),
         ),
       ),
@@ -234,10 +283,19 @@ class _SearchSurfaceState extends State<_SearchSurface> {
 
   @override
   Widget build(BuildContext context) {
-    return Glass(
-      radius: 22,
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-      opacity: 1,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: UlesColors.hairline),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(.04),
+              blurRadius: 18,
+              offset: const Offset(0, 10)),
+        ],
+      ),
       child: Row(
         children: [
           Icon(PhosphorIcons.magnifyingGlass(),

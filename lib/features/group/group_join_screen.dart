@@ -55,27 +55,36 @@ class _GroupJoinScreenState extends ConsumerState<GroupJoinScreen> {
             ListView(
               padding: const EdgeInsets.all(22),
               children: [
-                Glass(
-                  radius: 28,
+                Container(
+                  decoration: BoxDecoration(
+                    color: UlesColors.slate,
+                    borderRadius: BorderRadius.circular(28),
+                    boxShadow: [
+                      BoxShadow(
+                        color: UlesColors.slate.withOpacity(.18),
+                        blurRadius: 28,
+                        offset: const Offset(0, 16),
+                      ),
+                    ],
+                  ),
                   padding: const EdgeInsets.all(22),
-                  opacity: .98,
                   child: Column(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
-                          color: UlesColors.softGreen,
+                          color: Colors.white.withOpacity(.1),
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(
-                              color: UlesColors.green.withOpacity(.16)),
+                          border:
+                              Border.all(color: Colors.white.withOpacity(.12)),
                         ),
                         child: Text(
                             complete
                                 ? 'Финальная цена зафиксирована'
                                 : 'Live: группа собирается',
                             style: const TextStyle(
-                                color: Color(0xFF047857),
+                                color: UlesColors.green,
                                 fontWeight: FontWeight.w900)),
                       ),
                       const SizedBox(height: 18),
@@ -84,22 +93,29 @@ class _GroupJoinScreenState extends ConsumerState<GroupJoinScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .headlineSmall
-                              ?.copyWith(fontWeight: FontWeight.w900)),
+                              ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900)),
                       const SizedBox(height: 24),
                       AvatarStack(count: count, max: 8),
                       const SizedBox(height: 20),
                       _LiveCounter(
-                          count: count, target: product.minParticipants),
+                          count: count,
+                          target: product.minParticipants,
+                          inverted: true),
                       const SizedBox(height: 12),
                       GroupProgressBar(
                           current: count,
                           target: product.minParticipants,
                           height: 12),
                       const SizedBox(height: 22),
-                      PriceDrop(
-                          retailPrice: product.retailPrice,
-                          groupPrice: price,
-                          large: true),
+                      DefaultTextStyle.merge(
+                        style: const TextStyle(color: Colors.white),
+                        child: PriceDrop(
+                            retailPrice: product.retailPrice,
+                            groupPrice: price,
+                            large: true),
+                      ),
                     ],
                   ),
                 ),
@@ -196,10 +212,12 @@ class _GroupJoinScreenState extends ConsumerState<GroupJoinScreen> {
 }
 
 class _LiveCounter extends StatelessWidget {
-  const _LiveCounter({required this.count, required this.target});
+  const _LiveCounter(
+      {required this.count, required this.target, this.inverted = false});
 
   final int count;
   final int target;
+  final bool inverted;
 
   @override
   Widget build(BuildContext context) {
@@ -216,13 +234,16 @@ class _LiveCounter extends StatelessWidget {
         text: TextSpan(
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
               fontWeight: FontWeight.w900,
-              color: UlesColors.ink,
+              color: inverted ? Colors.white : UlesColors.ink,
               fontFeatures: const [FontFeature.tabularFigures()]),
           children: [
             TextSpan(text: '$count'),
             TextSpan(
                 text: ' / $target',
-                style: TextStyle(color: UlesColors.muted.withOpacity(.75))),
+                style: TextStyle(
+                    color: inverted
+                        ? Colors.white.withOpacity(.48)
+                        : UlesColors.muted.withOpacity(.75))),
           ],
         ),
       ),

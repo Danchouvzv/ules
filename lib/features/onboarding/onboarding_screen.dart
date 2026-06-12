@@ -212,14 +212,14 @@ class _HeroProductCard extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: compact ? 300 : 360),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(.98),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: UlesColors.hairline),
+        color: UlesColors.slate,
+        borderRadius: BorderRadius.circular(26),
+        border: Border.all(color: Colors.white.withOpacity(.08)),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(.07),
-              blurRadius: 28,
-              offset: const Offset(0, 14))
+              color: UlesColors.slate.withOpacity(.2),
+              blurRadius: 30,
+              offset: const Offset(0, 18))
         ],
       ),
       child: Column(
@@ -232,11 +232,11 @@ class _HeroProductCard extends StatelessWidget {
                 width: 54,
                 height: 54,
                 decoration: BoxDecoration(
-                  color: data.accent.withOpacity(.11),
+                  color: Colors.white.withOpacity(.1),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: data.accent.withOpacity(.18)),
+                  border: Border.all(color: Colors.white.withOpacity(.12)),
                 ),
-                child: Icon(data.icon, color: data.accent, size: 28),
+                child: Icon(data.icon, color: Colors.white, size: 28),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -247,7 +247,9 @@ class _HeroProductCard extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w900)),
+                            ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900)),
                     Text(data.reason,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -255,9 +257,7 @@ class _HeroProductCard extends StatelessWidget {
                             .textTheme
                             .labelMedium
                             ?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
+                                color: Colors.white.withOpacity(.64),
                                 fontWeight: FontWeight.w700)),
                   ],
                 ),
@@ -277,19 +277,20 @@ class _HeroProductCard extends StatelessWidget {
                             .textTheme
                             .titleMedium
                             ?.copyWith(
-                                color: UlesColors.danger,
+                                color: Colors.white.withOpacity(.48),
                                 decoration: TextDecoration.lineThrough,
+                                decorationColor: Colors.white.withOpacity(.48),
                                 fontWeight: FontWeight.w800)),
                     Text(kzt(data.priceAfter),
                         style: Theme.of(context)
                             .textTheme
                             .displaySmall
                             ?.copyWith(
-                                color: const Color(0xFF10B981),
+                                color: Colors.white,
                                 fontWeight: FontWeight.w900)),
                     Text('экономия ${kzt(saving)}',
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: const Color(0xFF65A30D),
+                            color: UlesColors.green,
                             fontWeight: FontWeight.w900)),
                   ],
                 ),
@@ -305,8 +306,8 @@ class _HeroProductCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: data.participants / 10,
               minHeight: 11,
-              backgroundColor: UlesColors.primary.withOpacity(.08),
-              valueColor: AlwaysStoppedAnimation(data.accent),
+              backgroundColor: Colors.white.withOpacity(.14),
+              valueColor: const AlwaysStoppedAnimation(UlesColors.green),
             ),
           ),
           const SizedBox(height: 14),

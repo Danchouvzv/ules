@@ -14,11 +14,21 @@ class AppBottomNav extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-        child: Glass(
-          radius: 24,
+        padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
+        child: Container(
           padding: const EdgeInsets.all(6),
-          opacity: .96,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(26),
+            border: Border.all(color: UlesColors.hairline),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(.08),
+                blurRadius: 30,
+                offset: const Offset(0, 14),
+              ),
+            ],
+          ),
           child: Row(
             children: [
               _NavItem(
@@ -69,19 +79,16 @@ class _NavItem extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 240),
           curve: Curves.easeOutCubic,
-          padding: const EdgeInsets.symmetric(vertical: 11),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: selected ? UlesColors.ink : Colors.transparent,
-            borderRadius: BorderRadius.circular(18),
+            color: selected ? UlesColors.slate : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon,
-                  size: 20,
-                  color: selected
-                      ? Colors.white
-                      : Theme.of(context).colorScheme.onSurfaceVariant),
+                  size: 20, color: selected ? Colors.white : UlesColors.muted),
               if (selected) ...[
                 const SizedBox(width: 7),
                 Flexible(

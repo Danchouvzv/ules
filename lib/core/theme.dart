@@ -14,13 +14,15 @@ class UlesColors {
   static const glass = Color(0xCCFFFFFF);
   static const darkBg = Color(0xFF0D0D14);
   static const darkCard = Color(0xFF1A1A24);
-  static const ink = Color(0xFF101828);
+  static const ink = Color(0xFF0B1220);
   static const muted = Color(0xFF667085);
-  static const hairline = Color(0xFFE4E7EC);
-  static const softBlue = Color(0xFFEAF4FF);
-  static const softGreen = Color(0xFFEAFBF0);
-  static const canvas = Color(0xFFF7F8FA);
+  static const hairline = Color(0xFFDDE3EA);
+  static const softBlue = Color(0xFFE8F3FF);
+  static const softGreen = Color(0xFFE9FBEF);
+  static const canvas = Color(0xFFF3F6FA);
   static const elevated = Color(0xFFFFFFFF);
+  static const slate = Color(0xFF182235);
+  static const amber = Color(0xFFFFB020);
 }
 
 class UlesTheme {
@@ -42,8 +44,7 @@ class UlesTheme {
     );
     final text = GoogleFonts.interTextTheme(base.textTheme);
     return base.copyWith(
-      scaffoldBackgroundColor:
-          isDark ? UlesColors.darkBg : const Color(0xFFF8FAFC),
+      scaffoldBackgroundColor: isDark ? UlesColors.darkBg : UlesColors.canvas,
       textTheme: text.apply(
         bodyColor: isDark ? Colors.white : UlesColors.ink,
         displayColor: isDark ? Colors.white : UlesColors.ink,
@@ -70,7 +71,7 @@ class UlesTheme {
           foregroundColor: Colors.white,
           minimumSize: const Size.fromHeight(54),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           textStyle:
               GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16),
         ),
@@ -120,24 +121,24 @@ class Glass extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        filter:
+            ImageFilter.blur(sigmaX: isDark ? 18 : 4, sigmaY: isDark ? 18 : 4),
         child: Container(
           padding: padding ?? const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: isDark
                 ? Colors.white.withOpacity(opacity ?? .08)
-                : Colors.white.withOpacity(opacity ?? .94),
+                : UlesColors.elevated.withOpacity(opacity ?? 1),
             borderRadius: BorderRadius.circular(radius),
             border: Border.all(
-              color: isDark
-                  ? Colors.white.withOpacity(.12)
-                  : UlesColors.hairline.withOpacity(.9),
+              color:
+                  isDark ? Colors.white.withOpacity(.12) : UlesColors.hairline,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(isDark ? .22 : .045),
-                blurRadius: 22,
-                offset: const Offset(0, 10),
+                color: Colors.black.withOpacity(isDark ? .22 : .06),
+                blurRadius: 26,
+                offset: const Offset(0, 14),
               ),
             ],
           ),
@@ -160,7 +161,7 @@ class IosPageBackground extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.white, UlesColors.canvas],
+          colors: [Color(0xFFFFFFFF), UlesColors.canvas],
         ),
       ),
       child: child,

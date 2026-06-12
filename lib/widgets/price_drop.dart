@@ -20,15 +20,21 @@ class PriceDrop extends StatelessWidget {
   Widget build(BuildContext context) {
     final saving = retailPrice - groupPrice;
     final style = Theme.of(context).textTheme;
+    final parentColor = DefaultTextStyle.of(context).style.color;
+    final inverted = parentColor == Colors.white;
+    final mainColor = inverted ? Colors.white : UlesColors.ink;
+    final mutedColor =
+        inverted ? Colors.white.withOpacity(.5) : UlesColors.muted;
+    final successColor = inverted ? UlesColors.green : const Color(0xFF078C3B);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           kzt(retailPrice),
           style: style.titleMedium?.copyWith(
-            color: UlesColors.muted,
+            color: mutedColor,
             decoration: TextDecoration.lineThrough,
-            decorationColor: UlesColors.muted,
+            decorationColor: mutedColor,
             fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
@@ -46,7 +52,7 @@ class PriceDrop extends StatelessWidget {
             kzt(groupPrice),
             key: ValueKey(groupPrice),
             style: (large ? style.displaySmall : style.headlineSmall)?.copyWith(
-              color: UlesColors.ink,
+              color: mainColor,
               fontWeight: FontWeight.w900,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),
@@ -56,7 +62,7 @@ class PriceDrop extends StatelessWidget {
           Text(
             'Экономия ${kzt(saving)} · ${((saving / retailPrice) * 100).round()}%',
             style: style.titleMedium?.copyWith(
-              color: const Color(0xFF078C3B),
+              color: successColor,
               fontWeight: FontWeight.w900,
             ),
           ),
