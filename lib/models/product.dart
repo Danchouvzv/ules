@@ -44,7 +44,8 @@ class Product {
   final String seller;
   final double rating;
 
-  double get groupCloseness => (currentParticipants / minParticipants).clamp(0, 1).toDouble();
+  double get groupCloseness =>
+      (currentParticipants / minParticipants).clamp(0, 1).toDouble();
 
   int priceForParticipants(int participants) {
     final progress = (participants / minParticipants).clamp(0, 1);
@@ -68,6 +69,48 @@ class Product {
       specs: specs,
       seller: seller,
       rating: rating,
+    );
+  }
+
+  Map<String, Object?> toJson() => {
+        'id': id,
+        'title': title,
+        'description': description,
+        'imageUrl': imageUrl,
+        'category': category.name,
+        'marketplace': marketplace.name,
+        'retailPrice': retailPrice,
+        'wholesalePrice': wholesalePrice,
+        'currentParticipants': currentParticipants,
+        'minParticipants': minParticipants,
+        'cityPopularity': cityPopularity,
+        'specs': specs,
+        'seller': seller,
+        'rating': rating,
+      };
+
+  static Product fromJson(Map<String, Object?> json) {
+    return Product(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      imageUrl: json['imageUrl'] as String,
+      category: ProductCategory.values.firstWhere(
+        (item) => item.name == json['category'],
+        orElse: () => ProductCategory.electronics,
+      ),
+      marketplace: Marketplace.values.firstWhere(
+        (item) => item.name == json['marketplace'],
+        orElse: () => Marketplace.aliexpress,
+      ),
+      retailPrice: json['retailPrice'] as int,
+      wholesalePrice: json['wholesalePrice'] as int,
+      currentParticipants: json['currentParticipants'] as int,
+      minParticipants: json['minParticipants'] as int,
+      cityPopularity: Map<String, double>.from(json['cityPopularity'] as Map),
+      specs: List<String>.from(json['specs'] as List),
+      seller: json['seller'] as String,
+      rating: (json['rating'] as num).toDouble(),
     );
   }
 }
@@ -157,7 +200,9 @@ class GroupOrder {
   final DateTime createdAt;
   final String esimId;
 
-  bool get isGroupClosed => participantsAtJoin >= targetParticipants || status.index >= OrderStatus.groupClosed.index;
+  bool get isGroupClosed =>
+      participantsAtJoin >= targetParticipants ||
+      status.index >= OrderStatus.groupClosed.index;
 
   GroupOrder copyWith({
     int? finalPrice,
@@ -203,7 +248,8 @@ class GroupOrder {
       finalPrice: json['finalPrice'] as int,
       participantsAtJoin: json['participantsAtJoin'] as int,
       targetParticipants: json['targetParticipants'] as int,
-      status: OrderStatus.values.firstWhere((s) => s.name == json['status'], orElse: () => OrderStatus.paymentHeld),
+      status: OrderStatus.values.firstWhere((s) => s.name == json['status'],
+          orElse: () => OrderStatus.paymentHeld),
       createdAt: DateTime.parse(json['createdAt'] as String),
       esimId: json['esimId'] as String,
     );

@@ -8,6 +8,9 @@ import '../../core/theme.dart';
 import '../../models/product.dart';
 import '../../widgets/formatters.dart';
 import '../../widgets/esim_card.dart';
+import '../../widgets/group_passport_card.dart';
+import '../../widgets/kaspi_settlement_card.dart';
+import '../../widgets/smart_close_card.dart';
 
 class OrderStatusScreen extends ConsumerWidget {
   const OrderStatusScreen({required this.productId, super.key});
@@ -17,42 +20,99 @@ class OrderStatusScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final product = ref.watch(productProvider(productId));
     final esim = ref.watch(esimProvider);
-    final matchingOrders = ref.watch(ordersProvider).where((item) => item.productId == productId);
+    final matchingOrders =
+        ref.watch(ordersProvider).where((item) => item.productId == productId);
     final order = matchingOrders.isEmpty ? null : matchingOrders.first;
     final activeIndex = order?.status.index ?? 0;
-    final steps = ['Оплата захолдирована', 'Группа собирается', 'Группа закрыта', 'Заказ оформлен у продавца', 'Доставка'];
+    final waitForMore =
+        ref.watch(smartCloseWaitIdsProvider).contains(productId);
+    final steps = [
+      'Оплата захолдирована',
+      'Группа собирается',
+      'Группа закрыта',
+      'Заказ оформлен у продавца',
+      'Доставка'
+    ];
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('Статус заказа')),
-      body: ListView(
-        padding: const EdgeInsets.all(22),
-        children: [
-          Text(order?.productTitle ?? product.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900)),
-          if (order != null) ...[
-            const SizedBox(height: 10),
-            Text('Kaspi hold: ${kzt(order.heldAmount)} · финальная цена: ${kzt(order.finalPrice)}', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: UlesColors.green, fontWeight: FontWeight.w900)),
-            Text('Заказ ${order.id} · eSIM место ${order.esimId}', style: Theme.of(context).textTheme.bodySmall),
-          ],
-          const SizedBox(height: 22),
-          for (var i = 0; i < steps.length; i++)
-            _TimelineRow(title: steps[i], active: i <= activeIndex, last: i == steps.length - 1),
-          const SizedBox(height: 18),
-          EsimCard(esim: esim, compact: true),
-          const SizedBox(height: 28),
-          if (order != null && order.status != OrderStatus.delivery)
-            FilledButton.tonal(
-              onPressed: () => ref.read(sessionProvider.notifier).progressOrder(order.id),
-              child: const Text('Обновить статус заказа'),
+      body: IosPageBackground(
+        child: ListView(
+          padding: const EdgeInsets.all(22),
+          children: [
+            Text(order?.productTitle ?? product.title,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.w900)),
+            if (order != null) ...[
+              const SizedBox(height: 10),
+              Text(
+                  'Kaspi hold: ${kzt(order.heldAmount)} · финальная цена: ${kzt(order.finalPrice)}',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: UlesColors.green, fontWeight: FontWeight.w900)),
+              Text('Заказ ${order.id} · eSIM место ${order.esimId}',
+                  style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(height: 22),
+              KaspiSettlementCard(
+                  heldAmount: order.heldAmount, finalAmount: order.finalPrice),
+            ],
+            const SizedBox(height: 22),
+            GroupPassportCard(
+              product: product,
+              participants:
+                  order?.participantsAtJoin ?? product.currentParticipants,
+              compact: true,
             ),
-          const SizedBox(height: 10),
-          FilledButton(onPressed: () => context.go('/feed'), child: const Text('Вернуться в ленту')),
-        ],
+            const SizedBox(height: 22),
+            SmartCloseCard(
+              product: product,
+              participants:
+                  order?.participantsAtJoin ?? product.currentParticipants,
+              waitForMore: waitForMore,
+              compact: true,
+              onToggle: () => ref
+                  .read(sessionProvider.notifier)
+                  .toggleSmartCloseWait(productId),
+            ),
+            const SizedBox(height: 22),
+            Glass(
+              radius: 26,
+              padding: const EdgeInsets.all(18),
+              opacity: .76,
+              child: Column(
+                children: [
+                  for (var i = 0; i < steps.length; i++)
+                    _TimelineRow(
+                        title: steps[i],
+                        active: i <= activeIndex,
+                        last: i == steps.length - 1),
+                ],
+              ),
+            ),
+            const SizedBox(height: 18),
+            EsimCard(esim: esim, compact: true),
+            const SizedBox(height: 28),
+            if (order != null && order.status != OrderStatus.delivery)
+              FilledButton.tonal(
+                onPressed: () =>
+                    ref.read(sessionProvider.notifier).progressOrder(order.id),
+                child: const Text('Обновить статус заказа'),
+              ),
+            const SizedBox(height: 10),
+            FilledButton(
+                onPressed: () => context.go('/feed'),
+                child: const Text('Вернуться в ленту')),
+          ],
+        ),
       ),
     );
   }
 }
 
 class _TimelineRow extends StatelessWidget {
-  const _TimelineRow({required this.title, required this.active, required this.last});
+  const _TimelineRow(
+      {required this.title, required this.active, required this.last});
   final String title;
   final bool active;
   final bool last;
@@ -64,15 +124,29 @@ class _TimelineRow extends StatelessWidget {
         children: [
           Column(
             children: [
-              Icon(active ? PhosphorIcons.checkCircle() : PhosphorIcons.circle(), color: active ? UlesColors.green : Colors.white38),
-              if (!last) Expanded(child: Container(width: 2, color: active ? UlesColors.green.withOpacity(.45) : Colors.white12)),
+              Icon(
+                  active ? PhosphorIcons.checkCircle() : PhosphorIcons.circle(),
+                  color: active
+                      ? UlesColors.green
+                      : UlesColors.muted.withOpacity(.35)),
+              if (!last)
+                Expanded(
+                    child: Container(
+                        width: 2,
+                        color: active
+                            ? UlesColors.green.withOpacity(.45)
+                            : UlesColors.muted.withOpacity(.12))),
             ],
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 24),
-              child: Text(title, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
+              child: Text(title,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w800)),
             ),
           ),
         ],

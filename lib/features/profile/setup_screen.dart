@@ -24,30 +24,95 @@ class SetupScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.all(22),
           children: [
-            TextFormField(
-              initialValue: profile.name,
-              decoration: _input(l.t('name')),
-              onChanged: (value) => ref.read(sessionProvider.notifier).updateProfile(profile.copyWith(name: value)),
-            ),
-            const SizedBox(height: 12),
-            DropdownButtonFormField<String>(
-              value: profile.city,
-              decoration: _input(l.t('city')),
-              items: ['Алматы', 'Астана', 'Шымкент', 'Караганда', 'Актобе'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-              onChanged: (value) => ref.read(sessionProvider.notifier).updateProfile(profile.copyWith(city: value)),
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: UlesColors.lightCard,
+                borderRadius: BorderRadius.circular(26),
+                border: Border.all(color: UlesColors.primary.withOpacity(.08)),
+                boxShadow: [
+                  BoxShadow(
+                      color: UlesColors.primary.withOpacity(.08),
+                      blurRadius: 24,
+                      offset: const Offset(0, 14))
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Персональная лента',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w900)),
+                  const SizedBox(height: 8),
+                  Text(
+                      'Эти данные реально влияют на скоринг товаров: бюджет, город и интересы меняют порядок ленты.',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: UlesColors.muted, height: 1.35)),
+                  const SizedBox(height: 18),
+                  TextFormField(
+                    initialValue: profile.name,
+                    decoration: _input(l.t('name')),
+                    onChanged: (value) => ref
+                        .read(sessionProvider.notifier)
+                        .updateProfile(profile.copyWith(name: value)),
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    value: profile.city,
+                    decoration: _input(l.t('city')),
+                    items: [
+                      'Алматы',
+                      'Астана',
+                      'Шымкент',
+                      'Караганда',
+                      'Актобе'
+                    ]
+                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .toList(),
+                    onChanged: (value) => ref
+                        .read(sessionProvider.notifier)
+                        .updateProfile(profile.copyWith(city: value)),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 22),
-            Text('${l.t('budget')}: ${kzt(profile.budget)}', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900)),
-            Slider(
-              value: profile.budget.toDouble(),
-              min: 0,
-              max: 500000,
-              divisions: 50,
-              activeColor: UlesColors.green,
-              onChanged: (value) => ref.read(sessionProvider.notifier).updateProfile(profile.copyWith(budget: value.round())),
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                  color: UlesColors.primary.withOpacity(.06),
+                  borderRadius: BorderRadius.circular(24)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('${l.t('budget')}: ${kzt(profile.budget)}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w900)),
+                  Slider(
+                    value: profile.budget.toDouble(),
+                    min: 0,
+                    max: 500000,
+                    divisions: 50,
+                    activeColor: UlesColors.green,
+                    onChanged: (value) => ref
+                        .read(sessionProvider.notifier)
+                        .updateProfile(profile.copyWith(budget: value.round())),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 22),
-            Text(l.t('chooseInterests'), style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900)),
+            Text(l.t('chooseInterests'),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.w900)),
             const SizedBox(height: 14),
             Wrap(
               spacing: 10,
@@ -57,9 +122,12 @@ class SetupScreen extends ConsumerWidget {
                 return ChoiceChip(
                   selected: selected,
                   selectedColor: UlesColors.green,
-                  avatar: Icon(_icon(category), size: 18, color: selected ? Colors.black : null),
+                  avatar: Icon(_icon(category),
+                      size: 18, color: selected ? Colors.black : null),
                   label: Text(category.label(lang)),
-                  labelStyle: TextStyle(fontWeight: FontWeight.w800, color: selected ? Colors.black : null),
+                  labelStyle: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      color: selected ? Colors.black : null),
                   onSelected: (_) {
                     HapticFeedback.selectionClick();
                     ref.read(sessionProvider.notifier).toggleInterest(category);
@@ -81,7 +149,14 @@ class SetupScreen extends ConsumerWidget {
     );
   }
 
-  InputDecoration _input(String label) => InputDecoration(filled: true, labelText: label, border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none));
+  InputDecoration _input(String label) => InputDecoration(
+        filled: true,
+        fillColor: UlesColors.primary.withOpacity(.045),
+        labelText: label,
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none),
+      );
 
   IconData _icon(ProductCategory category) => switch (category) {
         ProductCategory.electronics => PhosphorIcons.deviceMobile(),

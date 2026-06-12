@@ -4,6 +4,13 @@ Ules is a premium Flutter MVP for group buying in Kazakhstan. It includes onboar
 
 The product flow is stateful: profile edits, language/theme, onboarding completion, group participants, joined groups, Kaspi hold orders, and order statuses are persisted locally with `shared_preferences`.
 
+The UI is optimized for a product demo: the feed has a search surface, city context, trust metrics, category chips, premium product cards, persistent bottom navigation, order history, and sticky price-aware CTAs on product pages.
+
+Ules adds two trust-first mechanics beyond classic group buying:
+
+- **Group Passport**: transparent group economics, eSIM seats, local demand, marketplace source, refund SLA, and Kaspi hold rules.
+- **Smart Close**: participants can choose whether to close the group now or wait for the next participant tier to unlock a lower price.
+
 ## Project Structure
 
 - `lib/main.dart` - app entry point
@@ -29,6 +36,23 @@ Then install dependencies and run:
 ```sh
 flutter pub get
 flutter run
+```
+
+## Open in Xcode
+
+The iOS workspace is generated at:
+
+```sh
+open ios/Runner.xcworkspace
+```
+
+Open the `.xcworkspace`, not `Runner.xcodeproj`, because CocoaPods plugins are linked through the workspace.
+
+If Flutter or Xcode says `xcodebuild` is unavailable, install full Xcode from the App Store and select it:
+
+```sh
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+sudo xcodebuild -license accept
 ```
 
 Product/catalog data is still local seed data, but user actions are real inside the app: joining a group creates an order, reserves one eSIM-bound place, updates participant counts, persists the Kaspi hold, and shows the order in profile history after restart.

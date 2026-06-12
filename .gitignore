@@ -5,6 +5,8 @@
 .flutter-plugins
 .flutter-plugins-dependencies
 build/
+.idea/
+*.iml
 ios/Pods/
 ios/Flutter/Flutter.framework
 ios/Flutter/Flutter.podspec
