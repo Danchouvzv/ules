@@ -34,130 +34,160 @@ class ProductDetailScreen extends ConsumerWidget {
     final spotsLeft = product.minParticipants - product.currentParticipants;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 360,
-            pinned: true,
-            actions: [
-              IconButton(
-                onPressed: () => ref
-                    .read(sessionProvider.notifier)
-                    .toggleFavorite(product.id),
-                icon: Icon(
-                    PhosphorIcons.heart(isFavorite
-                        ? PhosphorIconsStyle.fill
-                        : PhosphorIconsStyle.regular),
-                    color: isFavorite ? UlesColors.danger : null),
-              )
-            ],
-            flexibleSpace: FlexibleSpaceBar(
-              background: Hero(
-                tag: 'product-${product.id}',
-                child: Image.network(
-                  product.imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: UlesColors.primary.withOpacity(.16),
-                      child: Center(
-                          child: Icon(PhosphorIcons.package(),
-                              color: UlesColors.green, size: 72)),
-                    );
-                  },
+      body: IosPageBackground(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 360,
+              pinned: true,
+              backgroundColor: Colors.white.withOpacity(.92),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: IconButton.filledTonal(
+                    onPressed: () => ref
+                        .read(sessionProvider.notifier)
+                        .toggleFavorite(product.id),
+                    icon: Icon(
+                        PhosphorIcons.heart(isFavorite
+                            ? PhosphorIconsStyle.fill
+                            : PhosphorIconsStyle.regular),
+                        color: isFavorite ? UlesColors.danger : UlesColors.ink),
+                  ),
+                )
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                background: Hero(
+                  tag: 'product-${product.id}',
+                  child: Image.network(
+                    product.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: UlesColors.softBlue,
+                        child: Center(
+                            child: Icon(PhosphorIcons.package(),
+                                color: UlesColors.primary, size: 72)),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(22),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(children: [
-                    _Marketplace(text: product.marketplace.label),
-                    const Spacer(),
-                    Icon(PhosphorIcons.star(PhosphorIconsStyle.fill),
-                        color: const Color(0xFFFFC857)),
-                    Text(product.rating.toStringAsFixed(1),
-                        style: const TextStyle(fontWeight: FontWeight.w900)),
-                  ]),
-                  const SizedBox(height: 16),
-                  Text(product.title,
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                          fontWeight: FontWeight.w900, height: 1.02)),
-                  const SizedBox(height: 12),
-                  Text(product.description,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          height: 1.35)),
-                  const SizedBox(height: 22),
-                  PriceDrop(
-                      retailPrice: product.retailPrice,
-                      groupPrice: currentPrice,
-                      large: true),
-                  const SizedBox(height: 22),
-                  _TrustBand(
-                      spotsLeft: spotsLeft,
-                      marketplace: product.marketplace.label),
-                  const SizedBox(height: 22),
-                  Row(children: [
-                    AvatarStack(count: product.currentParticipants),
-                    const SizedBox(width: 12),
-                    Expanded(
-                        child: GroupProgressBar(
-                            current: product.currentParticipants,
-                            target: product.minParticipants))
-                  ]),
-                  const SizedBox(height: 24),
-                  _PriceLadder(
-                      retail: product.retailPrice,
-                      target: product.wholesalePrice),
-                  const SizedBox(height: 24),
-                  GroupPassportCard(
-                    product: product,
-                    participants: product.currentParticipants,
-                  ),
-                  const SizedBox(height: 24),
-                  SmartCloseCard(
-                    product: product,
-                    participants: product.currentParticipants,
-                    waitForMore: waitForMore,
-                    onToggle: () => ref
-                        .read(sessionProvider.notifier)
-                        .toggleSmartCloseWait(product.id),
-                  ),
-                  const SizedBox(height: 24),
-                  RecommendationBadge(score: item.score, expanded: true),
-                  const SizedBox(height: 12),
-                  Text('Характеристики',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 10),
-                  ...product.specs.map((s) => ListTile(
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 18, 20, 22),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(children: [
+                      _Marketplace(text: product.marketplace.label),
+                      const Spacer(),
+                      Icon(PhosphorIcons.star(PhosphorIconsStyle.fill),
+                          color: const Color(0xFFFFB020), size: 19),
+                      const SizedBox(width: 4),
+                      Text(product.rating.toStringAsFixed(1),
+                          style: const TextStyle(fontWeight: FontWeight.w900)),
+                    ]),
+                    const SizedBox(height: 16),
+                    Text(product.title,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
+                                fontWeight: FontWeight.w900, height: 1.04)),
+                    const SizedBox(height: 10),
+                    Text(product.description,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: UlesColors.muted,
+                            height: 1.38,
+                            fontWeight: FontWeight.w600)),
+                    const SizedBox(height: 20),
+                    Glass(
+                      radius: 24,
+                      opacity: 1,
+                      padding: const EdgeInsets.all(16),
+                      child: PriceDrop(
+                          retailPrice: product.retailPrice,
+                          groupPrice: currentPrice,
+                          large: true),
+                    ),
+                    const SizedBox(height: 18),
+                    _TrustBand(
+                        spotsLeft: spotsLeft,
+                        marketplace: product.marketplace.label),
+                    const SizedBox(height: 20),
+                    Glass(
+                      radius: 22,
+                      opacity: 1,
+                      padding: const EdgeInsets.all(16),
+                      child: Row(children: [
+                        AvatarStack(count: product.currentParticipants),
+                        const SizedBox(width: 12),
+                        Expanded(
+                            child: GroupProgressBar(
+                                current: product.currentParticipants,
+                                target: product.minParticipants))
+                      ]),
+                    ),
+                    const SizedBox(height: 20),
+                    _PriceLadder(
+                        retail: product.retailPrice,
+                        target: product.wholesalePrice),
+                    const SizedBox(height: 20),
+                    GroupPassportCard(
+                      product: product,
+                      participants: product.currentParticipants,
+                    ),
+                    const SizedBox(height: 20),
+                    SmartCloseCard(
+                      product: product,
+                      participants: product.currentParticipants,
+                      waitForMore: waitForMore,
+                      onToggle: () => ref
+                          .read(sessionProvider.notifier)
+                          .toggleSmartCloseWait(product.id),
+                    ),
+                    const SizedBox(height: 20),
+                    Glass(
+                      radius: 24,
+                      opacity: 1,
+                      padding: const EdgeInsets.all(16),
+                      child: RecommendationBadge(
+                          score: item.score, expanded: true),
+                    ),
+                    const SizedBox(height: 20),
+                    Text('Характеристики',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.w900)),
+                    const SizedBox(height: 10),
+                    ...product.specs.map((s) => ListTile(
+                        dense: true,
+                        contentPadding: EdgeInsets.zero,
+                        leading: Icon(PhosphorIcons.checkCircle(),
+                            color: UlesColors.green),
+                        title: Text(s,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w700)))),
+                    const SizedBox(height: 12),
+                    ListTile(
                       contentPadding: EdgeInsets.zero,
-                      leading: Icon(PhosphorIcons.checkCircle(),
-                          color: UlesColors.green),
-                      title: Text(s))),
-                  const SizedBox(height: 12),
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(PhosphorIcons.storefront(),
-                        color: UlesColors.primary),
-                    title: Text(product.seller,
-                        style: const TextStyle(fontWeight: FontWeight.w900)),
-                    subtitle: const Text(
-                        'Проверенный продавец · доставка в Казахстан'),
-                  ),
-                  const SizedBox(height: 90),
-                ],
+                      leading: Icon(PhosphorIcons.storefront(),
+                          color: UlesColors.primary),
+                      title: Text(product.seller,
+                          style: const TextStyle(fontWeight: FontWeight.w900)),
+                      subtitle: const Text(
+                          'Проверенный продавец · доставка в Казахстан'),
+                    ),
+                    const SizedBox(height: 90),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: SafeArea(
         child: _JoinBottomBar(
@@ -187,9 +217,9 @@ class _JoinBottomBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       child: Glass(
-        radius: 24,
+        radius: 22,
         padding: const EdgeInsets.all(12),
-        opacity: .78,
+        opacity: 1,
         child: Row(
           children: [
             Expanded(
@@ -199,12 +229,11 @@ class _JoinBottomBar extends StatelessWidget {
                 children: [
                   Text('Цена сейчас',
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: UlesColors.muted,
                           fontWeight: FontWeight.w800)),
                   Text(kzt(price),
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: UlesColors.green,
-                          fontWeight: FontWeight.w900)),
+                          color: UlesColors.ink, fontWeight: FontWeight.w900)),
                 ],
               ),
             ),
@@ -264,11 +293,11 @@ class _TrustTile extends StatelessWidget {
     return Glass(
       radius: 18,
       padding: const EdgeInsets.all(12),
-      opacity: .72,
+      opacity: 1,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: UlesColors.green, size: 22),
+          Icon(icon, color: UlesColors.primary, size: 22),
           const SizedBox(height: 8),
           Text(title,
               maxLines: 1,
@@ -278,8 +307,7 @@ class _TrustTile extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700)),
+                  color: UlesColors.muted, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -293,9 +321,12 @@ class _Marketplace extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-            color: UlesColors.primary.withOpacity(.18),
-            borderRadius: BorderRadius.circular(999)),
-        child: Text(text, style: const TextStyle(fontWeight: FontWeight.w900)),
+            color: UlesColors.softBlue,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: UlesColors.primary.withOpacity(.12))),
+        child: Text(text,
+            style: const TextStyle(
+                color: UlesColors.primary, fontWeight: FontWeight.w900)),
       );
 }
 
@@ -313,7 +344,7 @@ class _PriceLadder extends StatelessWidget {
     return Glass(
       radius: 22,
       padding: const EdgeInsets.all(16),
-      opacity: .74,
+      opacity: 1,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -334,12 +365,12 @@ class _PriceLadder extends StatelessWidget {
                     child: LinearProgressIndicator(
                         value: row.$1 / 20,
                         minHeight: 8,
-                        color: UlesColors.green,
-                        backgroundColor: Colors.white10)),
+                        color: UlesColors.ink,
+                        backgroundColor: UlesColors.hairline)),
                 const SizedBox(width: 12),
                 Text(kzt(row.$2),
                     style: const TextStyle(
-                        fontWeight: FontWeight.w900, color: UlesColors.green)),
+                        fontWeight: FontWeight.w900, color: UlesColors.ink)),
               ]),
             ),
         ],

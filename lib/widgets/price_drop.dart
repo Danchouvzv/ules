@@ -26,8 +26,9 @@ class PriceDrop extends StatelessWidget {
         Text(
           kzt(retailPrice),
           style: style.titleMedium?.copyWith(
-            color: UlesColors.danger,
+            color: UlesColors.muted,
             decoration: TextDecoration.lineThrough,
+            decorationColor: UlesColors.muted,
             fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
@@ -36,7 +37,8 @@ class PriceDrop extends StatelessWidget {
           switchInCurve: Curves.easeOutCubic,
           transitionBuilder: (child, animation) {
             return SlideTransition(
-              position: Tween(begin: const Offset(0, .35), end: Offset.zero).animate(animation),
+              position: Tween(begin: const Offset(0, .35), end: Offset.zero)
+                  .animate(animation),
               child: FadeTransition(opacity: animation, child: child),
             );
           },
@@ -44,7 +46,7 @@ class PriceDrop extends StatelessWidget {
             kzt(groupPrice),
             key: ValueKey(groupPrice),
             style: (large ? style.displaySmall : style.headlineSmall)?.copyWith(
-              color: UlesColors.green,
+              color: UlesColors.ink,
               fontWeight: FontWeight.w900,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),
@@ -53,7 +55,10 @@ class PriceDrop extends StatelessWidget {
         if (large)
           Text(
             'Экономия ${kzt(saving)} · ${((saving / retailPrice) * 100).round()}%',
-            style: style.titleMedium?.copyWith(color: UlesColors.lime, fontWeight: FontWeight.w800),
+            style: style.titleMedium?.copyWith(
+              color: const Color(0xFF078C3B),
+              fontWeight: FontWeight.w900,
+            ),
           ),
       ],
     );

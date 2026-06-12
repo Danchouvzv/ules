@@ -28,12 +28,12 @@ class ProductCard extends ConsumerWidget {
     final savingPercent =
         ((1 - groupPrice / product.retailPrice) * 100).round();
     return InkWell(
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(26),
       onTap: () => context.go('/product/${product.id}'),
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.only(bottom: 16),
         child: Glass(
-          radius: 22,
+          radius: 26,
           padding: EdgeInsets.zero,
           opacity: 1,
           child: Column(
@@ -45,9 +45,9 @@ class ProductCard extends ConsumerWidget {
                     tag: 'product-${product.id}',
                     child: ClipRRect(
                       borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(22)),
+                          const BorderRadius.vertical(top: Radius.circular(26)),
                       child: AspectRatio(
-                        aspectRatio: 1.52,
+                        aspectRatio: 1.42,
                         child: Image.network(
                           product.imageUrl,
                           fit: BoxFit.cover,
@@ -76,13 +76,13 @@ class ProductCard extends ConsumerWidget {
                     ),
                   ),
                   Positioned(
-                    left: 14,
-                    top: 14,
+                    left: 12,
+                    top: 12,
                     child: _Badge(text: product.marketplace.label),
                   ),
                   Positioned(
-                    right: 14,
-                    top: 14,
+                    right: 12,
+                    top: 12,
                     child: Row(
                       children: [
                         _SavingBadge(text: '-$savingPercent%'),
@@ -99,7 +99,7 @@ class ProductCard extends ConsumerWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.all(15),
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -112,16 +112,16 @@ class ProductCard extends ConsumerWidget {
                           .titleLarge
                           ?.copyWith(fontWeight: FontWeight.w900, height: 1.05),
                     ),
-                    const SizedBox(height: 12),
-                    PriceDrop(
-                        retailPrice: product.retailPrice,
-                        groupPrice: groupPrice),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
+                        Expanded(
+                          child: PriceDrop(
+                              retailPrice: product.retailPrice,
+                              groupPrice: groupPrice),
+                        ),
                         _ClosingBadge(spotsLeft: spotsLeft),
-                        const Spacer(),
-                        AvatarStack(count: product.currentParticipants),
                       ],
                     ),
                     const SizedBox(height: 14),
@@ -135,7 +135,28 @@ class ProductCard extends ConsumerWidget {
                         _ScorePill(score: item.score.total),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AvatarStack(count: product.currentParticipants),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            '${product.currentParticipants} участников уже внутри',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium
+                                ?.copyWith(
+                                  color: UlesColors.muted,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
                     RecommendationBadge(score: item.score),
                   ],
                 ),
@@ -156,7 +177,7 @@ class _FavoriteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white.withOpacity(.74),
+      color: Colors.white.withOpacity(.92),
       shape: const CircleBorder(),
       child: InkWell(
         customBorder: const CircleBorder(),
@@ -168,7 +189,7 @@ class _FavoriteButton extends StatelessWidget {
                 ? PhosphorIconsStyle.fill
                 : PhosphorIconsStyle.regular),
             color: selected ? UlesColors.danger : UlesColors.ink,
-            size: 17,
+            size: 18,
           ),
         ),
       ),
@@ -185,7 +206,7 @@ class _Badge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
-          color: Colors.white.withOpacity(.76),
+          color: Colors.white.withOpacity(.92),
           border: Border.all(color: UlesColors.hairline),
           borderRadius: BorderRadius.circular(999)),
       child: Text(text,
@@ -206,12 +227,12 @@ class _SavingBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
-          color: UlesColors.softGreen,
-          border: Border.all(color: UlesColors.green.withOpacity(.18)),
+          color: Colors.white.withOpacity(.92),
+          border: Border.all(color: UlesColors.hairline),
           borderRadius: BorderRadius.circular(999)),
       child: Text(text,
           style: const TextStyle(
-              color: Color(0xFF047857),
+              color: UlesColors.ink,
               fontWeight: FontWeight.w900,
               fontSize: 12)),
     );
@@ -228,22 +249,23 @@ class _ClosingBadge extends StatelessWidget {
         spotsLeft <= 0 ? 'группа закрыта' : 'осталось $spotsLeft места';
     return Container(
       constraints: const BoxConstraints(maxWidth: 180),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: UlesColors.hairline),
+          color: UlesColors.softGreen,
+          border: Border.all(color: UlesColors.green.withOpacity(.18)),
           borderRadius: BorderRadius.circular(999)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(PhosphorIcons.usersThree(), color: UlesColors.green, size: 15),
+          Icon(PhosphorIcons.usersThree(),
+              color: const Color(0xFF078C3B), size: 15),
           const SizedBox(width: 6),
           Flexible(
               child: Text(text,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                      color: UlesColors.ink,
+                      color: Color(0xFF078C3B),
                       fontWeight: FontWeight.w900,
                       fontSize: 12))),
         ],
@@ -261,18 +283,18 @@ class _ScorePill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-          color: UlesColors.softBlue,
-          border: Border.all(color: UlesColors.primary.withOpacity(.12)),
+          color: const Color(0xFFF8FAFC),
+          border: Border.all(color: UlesColors.hairline),
           borderRadius: BorderRadius.circular(14)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text('${(score * 100).round()}',
               style: const TextStyle(
-                  fontWeight: FontWeight.w900, color: UlesColors.green)),
+                  fontWeight: FontWeight.w900, color: UlesColors.ink)),
           Text('score',
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: UlesColors.primary, fontWeight: FontWeight.w800)),
+                  color: UlesColors.muted, fontWeight: FontWeight.w800)),
         ],
       ),
     );

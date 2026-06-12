@@ -4,21 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UlesColors {
-  static const primary = Color(0xFF2563EB);
+  static const primary = Color(0xFF0A84FF);
   static const electric = Color(0xFF3B82F6);
   static const lime = Color(0xFF84CC16);
-  static const green = Color(0xFF10B981);
-  static const danger = Color(0xFFEF4444);
+  static const green = Color(0xFF34C759);
+  static const danger = Color(0xFFFF3B30);
   static const lightBg = Color(0xFFFFFFFF);
   static const lightCard = Color(0xFFFFFFFF);
   static const glass = Color(0xCCFFFFFF);
   static const darkBg = Color(0xFF0D0D14);
   static const darkCard = Color(0xFF1A1A24);
-  static const ink = Color(0xFF111827);
-  static const muted = Color(0xFF6B7280);
-  static const hairline = Color(0xFFE5E7EB);
-  static const softBlue = Color(0xFFEFF6FF);
-  static const softGreen = Color(0xFFECFDF5);
+  static const ink = Color(0xFF101828);
+  static const muted = Color(0xFF667085);
+  static const hairline = Color(0xFFE4E7EC);
+  static const softBlue = Color(0xFFEAF4FF);
+  static const softGreen = Color(0xFFEAFBF0);
+  static const canvas = Color(0xFFF7F8FA);
+  static const elevated = Color(0xFFFFFFFF);
 }
 
 class UlesTheme {
@@ -64,11 +66,11 @@ class UlesTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: UlesColors.primary,
+          backgroundColor: UlesColors.ink,
           foregroundColor: Colors.white,
           minimumSize: const Size.fromHeight(54),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           textStyle:
               GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16),
         ),
@@ -118,7 +120,7 @@ class Glass extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(
           padding: padding ?? const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -129,13 +131,13 @@ class Glass extends StatelessWidget {
             border: Border.all(
               color: isDark
                   ? Colors.white.withOpacity(.12)
-                  : UlesColors.hairline.withOpacity(.82),
+                  : UlesColors.hairline.withOpacity(.9),
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(isDark ? .22 : .055),
-                blurRadius: 18,
-                offset: const Offset(0, 8),
+                color: Colors.black.withOpacity(isDark ? .22 : .045),
+                blurRadius: 22,
+                offset: const Offset(0, 10),
               ),
             ],
           ),
@@ -158,7 +160,7 @@ class IosPageBackground extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.white, Color(0xFFF8FAFC)],
+          colors: [Colors.white, UlesColors.canvas],
         ),
       ),
       child: child,

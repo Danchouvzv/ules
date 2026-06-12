@@ -30,13 +30,13 @@ class GroupProgressBar extends StatelessWidget {
             builder: (context, animatedValue, _) {
               return Stack(
                 children: [
-                  Container(height: height, color: Colors.white.withOpacity(.1)),
+                  Container(height: height, color: UlesColors.hairline),
                   FractionallySizedBox(
                     widthFactor: animatedValue,
                     child: Container(
                       height: height,
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(colors: [UlesColors.danger, UlesColors.lime, UlesColors.green]),
+                      decoration: BoxDecoration(
+                        color: value >= 1 ? UlesColors.green : UlesColors.ink,
                       ),
                     ),
                   ),
@@ -48,7 +48,10 @@ class GroupProgressBar extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           '$current из $target собрано',
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: UlesColors.muted,
+                fontWeight: FontWeight.w700,
+              ),
         ),
       ],
     );

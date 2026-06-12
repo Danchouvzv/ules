@@ -302,7 +302,8 @@ class _InsightsRow extends StatelessWidget {
         Expanded(child: _MetricCard(value: '$closedGroups', label: 'групп')),
         const SizedBox(width: 10),
         Expanded(
-            child: _MetricCard(value: kzt(savedAmount), label: 'экономия')),
+            child:
+                _MetricCard(value: compactKzt(savedAmount), label: 'экономия')),
         const SizedBox(width: 10),
         Expanded(child: _MetricCard(value: '$hotGroups', label: 'горячие')),
       ],
@@ -319,8 +320,8 @@ class _MetricCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Glass(
-      radius: 22,
-      padding: const EdgeInsets.all(13),
+      radius: 20,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
       opacity: 1,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,7 +329,7 @@ class _MetricCard extends StatelessWidget {
           Text(value,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w900, color: UlesColors.primary)),
           const SizedBox(height: 2),
           Text(label,
